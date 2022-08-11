@@ -1,3 +1,3 @@
 <?php
 
-echo 'Tela inicial Sistema';
+require_once("api.php");
