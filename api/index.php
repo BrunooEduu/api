@@ -9,14 +9,16 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 require_once "lib/slim/autoload.php";
-require_once ("core/Utils.php");
+require_once("./core/Utils.php");
 
-require_once("controllers/ControllerApiBase.php");
-require_once("controllers/ControllerApiUsuario.php");
+require_once("./controllers/ControllerApiBase.php");
+require_once("./controllers/ControllerApiUsuario.php");
 
-class Routes {
+class Routes
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->runApp();
     }
 
@@ -25,15 +27,16 @@ class Routes {
      *
      * @throws Throwable
      */
-    protected function runApp() {
+    protected function runApp()
+    {
         $app = new \Slim\App($this->getConfigurationContainer());
 
         // Agrupando rotas para adicionar o middleware em todas as rotas de uma só vez
         $app->group('', function () use ($app) {
-            
+
             // Pagina inicial da api
             $app->get('/', ControllerApiBase::class . ':callPing');
-            
+
             $app->get('/ping', ControllerApiBase::class . ':callPing');
 
             // Cadastros
@@ -48,7 +51,8 @@ class Routes {
      *
      * @return \Slim\Container
      */
-    private function getConfigurationContainer() {
+    private function getConfigurationContainer()
+    {
         // Configuração de erros
         $configuration = [
             'settings' => [
@@ -66,8 +70,9 @@ class Routes {
      * @param $token
      * @return bool
      */
-    public static function isValidToken($token) {
-        require_once ("core/Query.php");
+    public static function isValidToken($token)
+    {
+        require_once("core/Query.php");
         $oQuery = new Query();
 
         $aDados = $oQuery->select("select usutoken as token
@@ -93,7 +98,8 @@ class Routes {
      *
      * @return Closure
      */
-    private function getMiddlewares() {
+    private function getMiddlewares()
+    {
         // Middlewares
         $Middlware = function (Request $request, Response $response, $next) {
             //
@@ -126,14 +132,15 @@ class Routes {
             // }
 
             $response = $next($request, $response);
-            
+
             return $response;
         };
 
         return $Middlware;
     }
 
-    private static function getTokenApi(){
+    private static function getTokenApi()
+    {
         return 'BE406D16ABFB8AB03A6AC07C25EBFA9E0D05DB778E0E679F214A13180530D46E1E62D206D4DF7FF8397B18DEFBE3847334809E314AAD2607E15DE7F9597CC990';
     }
 }
