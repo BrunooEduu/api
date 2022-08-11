@@ -9,13 +9,16 @@
 
 //require_once 'lib/phpfastcache/phpfastcache.php';
 
-class Utils {
+class Utils
+{
 
-    public static function isServidorProducao() {
+    public static function isServidorProducao()
+    {
         return false;
     }
-    
-    public static function getCacheServer() {
+
+    public static function getCacheServer()
+    {
         // Ip da maquina local quando não estiver em nuvem
         $host = '192.168.1.2';
         $cache = phpFastCache("predis", array(
@@ -28,7 +31,8 @@ class Utils {
         return $cache;
     }
 
-    public static function getRemoteIP() {
+    public static function getRemoteIP()
+    {
         $remoteIP = $_SERVER['REMOTE_ADDR'];
         if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
             $remoteIP = $_SERVER["HTTP_X_FORWARDED_FOR"];
@@ -47,7 +51,8 @@ class Utils {
         return $remoteIP;
     }
 
-    public static function enviaMensagemSlack($assunto, $message, $room = "geral") {
+    public static function enviaMensagemSlack($assunto, $message, $room = "geral")
+    {
         try {
             $assunto = str_ireplace("<br>", "\n", $assunto);
             $assunto = str_ireplace("<br/>", "\n", $assunto);
@@ -56,13 +61,13 @@ class Utils {
             $message = str_ireplace("<br/>", "\n", $message);
 
             $data = "payload=" . json_encode(array(
-                    "channel" => "#{$room}",
-                    "text" => "[$assunto] \n$message"
-                ));
+                "channel" => "#{$room}",
+                "text" => "[$assunto] \n$message"
+            ));
 
             // You can get your webhook endpoint from your Slack settings
             $url_app_gelvazio = "https://hooks.slack.com/services/";
-            if($room == 'geral'){
+            if ($room == 'geral') {
                 $url_app_gelvazio = "https://hooks.slack.com/services/";
             }
 
@@ -77,15 +82,16 @@ class Utils {
 
             return $result;
         } catch (Exception $ex) {
-
         }
     }
 
-    public static function sendSentry(){
+    public static function sendSentry()
+    {
         // Implementar envio de bugs  ao Sentry
     }
 
-    public static function checkRateLimit($app, $tag) {
+    public static function checkRateLimit($app, $tag)
+    {
         // Implementar rate limits
         return true;
 
@@ -112,9 +118,10 @@ class Utils {
         return true;
     }
 
-    private static function checkRateLimitRedis($app, $key, $max, $time = 1) {
+    private static function checkRateLimitRedis($app, $key, $max, $time = 1)
+    {
         if (trim($key) != "" && strlen(trim($key)) > 4) {
-            $keyCache = "RATE_LIMIT_".$app."_".$key."_".$max;
+            $keyCache = "RATE_LIMIT_" . $app . "_" . $key . "_" . $max;
 
             $cache = Utils::getCacheServer();
             $object = $cache->get($keyCache, array('all_keys' => true));
@@ -127,7 +134,7 @@ class Utils {
             $time_expired = $object['expired_time'] - @date("U");
             $count = intval($cache->get($keyCache));
 
-            if ((Int)$time_expired <= 0) {
+            if ((int)$time_expired <= 0) {
                 $cache->set($keyCache, 0, $time);
             } else {
                 $count = $count + 1;
@@ -138,7 +145,7 @@ class Utils {
                 $assunto = "Rate limit [$app]";
                 $texto = "Key: $key<br>Count: $count <br>Max: $max<br>Time: $time";
 
-                Utils::slack($assunto, $texto, "geral");
+                //Utils::slack($assunto, $texto, "geral");
 
                 return false;
             }
@@ -146,7 +153,8 @@ class Utils {
         return true;
     }
 
-    public static function getConexao(){
+    public static function getConexao()
+    {
         $IP = "";
         $DATABASE_NAME = "DATABASE_NAME";
 
