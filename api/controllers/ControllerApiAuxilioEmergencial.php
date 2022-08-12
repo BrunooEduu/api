@@ -3168,7 +3168,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         
         // return $response->withJson(array("ok" => true, 200));
         
-        // ibge Rio do Sul
+        // ibge Rio do Sul 
         $codigoibge = 4214805;
         $aListaAnos = $this->getListaAnos();
         $aListaDadosCadastrados = array();
