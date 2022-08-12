@@ -16,7 +16,19 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
 
     public function getAuxilios(Request $request, /*@var $response MessageInterface */ Response $response, array $args)
     {
-        $sSql = "SELECT * FROM auxilioemergencial ORDER BY 1";
+    
+        $body = $request->getParsedBody();
+        
+        $codigoibge = isset($body["codigoibge"]) ? $body["codigoibge"] : 4214805;
+        $mesAno     = isset($body["mesano"]) ? $body["mesano"] : 202204;
+        $pagina     = isset($body["pagina"]) ? $body["pagina"] : 1;
+        
+        $sSql = " select * 
+                    from auxilioemergencial 
+                   where codigoibge = $codigoibge
+                     and mesano = $mesAno 
+                     and pagina = $pagina 
+                     and limit 100 ";
 
         $aDados = $this->getQuery()->selectAll($sSql);
 
