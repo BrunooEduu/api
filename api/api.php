@@ -41,6 +41,9 @@ class Routes
 
             // Cadastros
             $app->get('/users', ControllerApiUsuario::class . ':getUsuario');
+
+            // Auxilios
+            $app->get('/auxilios', ControllerApiAuxilioEmergencial::class . ':getAuxilios');
         })->add($this->getMiddlewares());
 
         $app->run();
