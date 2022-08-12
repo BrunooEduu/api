@@ -14,6 +14,9 @@ class ControllerApiBase {
 
     public function callPing(Request $request, Response $response, array $args) {
         $data = array("data" => date("Y-m-d H:i:s"));
+    
+        header('Content-Type: application/json; charset=utf-8');
+        
         return $response->withJson($data, 200);
     }
 
