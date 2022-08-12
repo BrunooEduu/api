@@ -3241,7 +3241,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
     
     private function getListaAnos(){
         
-        return array(202101);
+        return array(202102);
         
         return array(
             202004
@@ -3254,7 +3254,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
             ,202011
             ,202012
             //,202101 => ja foi...
-            ,202102
+            //,202102
             ,202103
             ,202104
             ,202105
