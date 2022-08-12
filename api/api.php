@@ -45,6 +45,9 @@ class Routes
 
             // Auxilios
             $app->get('/auxilios', ControllerApiAuxilioEmergencial::class . ':getAuxilios');
+
+            // Cadastrar lista de auxilios
+            $app->post('/cadastrarauxilios', ControllerApiAuxilioEmergencial::class . ':cadastrarAuxilios');
         })->add($this->getMiddlewares());
 
         $app->run();

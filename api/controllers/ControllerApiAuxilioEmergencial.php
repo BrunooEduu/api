@@ -22,4 +22,19 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
 
         return $response->withJson($aDados, 200);
     }
+
+
+    public function cadastrarAuxilios(Request $request, /*@var $response MessageInterface */ Response $response, array $args)
+    {
+        //$sSql = "SELECT * FROM auxilioemergencial ORDER BY 1";
+
+        // $body = $request->getParsedBody();
+        // //$aDados = $this->getQuery()->selectAll($sSql);
+
+        // return $response->withJson($body, 200);
+
+
+        $data = array("data" => date("Y-m-d H:i:s"));
+        return $response->withJson($data, 200);
+    }
 }
