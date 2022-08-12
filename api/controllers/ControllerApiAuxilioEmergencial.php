@@ -3164,8 +3164,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
     public function cadastrarAuxilios(Request $request, Response $response, array $args) {
 
         // $body = $request->getParsedBody();
-    
-        
+            
         // return $response->withJson(array("ok" => true, 200));
         
         // ibge Rio do Sul
@@ -3176,8 +3175,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
             $contador = 1;
             $totalPagina = 1;
             $sSql = "";
-    
-    
+        
             $pagina = 1;
     
             $totalPagina = 40;
