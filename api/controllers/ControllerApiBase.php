@@ -21,14 +21,14 @@ class ControllerApiBase {
     }
 
     public function test(Request $request, Response $response, array $args) {
-        
-        $request_data = array(
+    
+        $data = array(
             "data" => date("Y-m-d H:i:s"),
             "body"=>$request->getParsedBody(),
-            "headers"=>$request->headers()
+            "headers"=>$request->getHeaders()
         );
         
-        return $response->withJson($request_data, 200);
+        return $response->withJson($data, 200);
     }
 
     /**
