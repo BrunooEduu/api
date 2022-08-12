@@ -3171,14 +3171,13 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         $codigoibge = 4214805;
         $aListaAnos = $this->getListaAnos();
         $aListaDadosCadastrados = array();
+        $aListaDadosInseridosNovos = array();
+        $aListaDadosErroInserirNovos = array();
+        
         foreach ($aListaAnos as $mesano){
             $contador = 1;
-            $totalPagina = 1;
-            $sSql = "";
-        
-            $pagina = 1;
-    
-            $totalPagina = 10;
+            $totalPagina = 1;    
+            $totalPagina = 50;
             while ($contador <= $totalPagina) {
                 $pagina = $contador;
                 
@@ -3190,51 +3189,53 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         
                 $aDados = $this->getQuery()->selectAll($sSql);
                 
+                $aListaDadosCadastradosAtual = array(
+                    "codigoibge" => $codigoibge,
+                    "mesano" => $mesano,
+                    "pagina" => $pagina
+                );
+                
                 if(count($aDados)){
-                    array_push($aListaDadosCadastrados, array(
-                        "codigoibge" => $codigoibge,
-                        "mesano" => $mesano,
-                        "pagina" => $pagina
-                    ));
-                }
-                $contador++;
-            }
-            
-            continue;
-            
-            
-            while ($contador <= $totalPagina) {
-                // ano 202101 - Rio do Sul
-                // $oDadosAuxilio = $this->getDadosAuxilioPorPagina($contador);
-        
-                $pagina = $contador;
-                
-                error_log("Buscando dados...mesano:$mesano, codigoibge: $codigoibge, pagina: $pagina");
-                
-                $oDadosAuxilio = $this->getDadosAuxilio($mesano, $codigoibge, $pagina);
-                
-                if($oDadosAuxilio){
-                    $oDadosAuxilio = json_decode($oDadosAuxilio);
-    
-                    if(is_array($oDadosAuxilio) && count($oDadosAuxilio)){
-                        // sql montado
-                        $sSql = 'insert into auxilioemergencial(codigoibge, mesano, pagina, dados)
-                        values(' . $codigoibge . ', ' . $mesano . ',
-                        ' . $contador . ', \'' . json_encode($oDadosAuxilio) . '\');';
-        
-                        $this->getQuery()->query($sSql);
-        
-                        $totalPagina++;
+                    array_push($aListaDadosCadastrados, $aListaDadosCadastradosAtual);
+                } else {
+                    // Busca os dados e tenta inserir no sistema se existirem
+                    if($oDadosAuxilio = $this->insereDadosAuxilioEmergencial($mesano, $codigoibge, $pagina)){
+                        array_push($aListaDadosInseridosNovos, $oDadosAuxilio);                        
                     } else {
-                        break;
-                    }
+                        array_push($aListaDadosErroInserirNovos, $aListaDadosCadastradosAtual);
+                    }                    
                 }
-                
                 $contador++;
             }
         }
      
+        array("listaDadosCadastrados" => $aListaDadosCadastrados,
+              "listaDadosInseridosNovos" => $aListaDadosInseridosNovos,
+              "listaDadosErroInserirNovos" => $aListaDadosErroInserirNovos);
+        
         return $response->withJson($aListaDadosCadastrados, 200);
+    }
+    
+    private function insereDadosAuxilioEmergencial($mesano, $codigoibge, $pagina){
+        
+        $oDadosAuxilio = $this->getDadosAuxilio($mesano, $codigoibge, $pagina);
+    
+        if($oDadosAuxilio){
+            $oDadosAuxilio = json_decode($oDadosAuxilio);
+        
+            if(is_array($oDadosAuxilio) && count($oDadosAuxilio)){
+                // sql
+                $sSql = 'insert into auxilioemergencial(codigoibge, mesano, pagina, dados)
+                        values(' . $codigoibge . ', ' . $mesano . ',
+                        ' . $pagina . ', \'' . json_encode($oDadosAuxilio) . '\');';
+            
+                if($this->getQuery()->query($sSql, true)){
+                    return $oDadosAuxilio;
+                }
+            }
+        }
+        
+        return false;
     }
     
     private function getListaAnos(){

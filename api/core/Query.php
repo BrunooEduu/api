@@ -26,12 +26,16 @@ class Query {
         return $aRetorno;
     }
 
-    public function query($sSql) {
+    public function query($sSql, $retornoBoolean = false) {
         $rRetorno = @pg_query($this->conexao, $sSql);
         if ($rRetorno !== false) {
             return $rRetorno;
         }
 
+        if($retornoBoolean){
+            return false;    
+        }
+        
         throw new Exception('Erro ao executar comando SQL');
     }
 
