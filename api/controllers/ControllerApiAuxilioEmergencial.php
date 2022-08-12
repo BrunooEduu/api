@@ -3163,8 +3163,9 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
 
     public function cadastrarAuxilios(Request $request, Response $response, array $args) {
 
-        // $body = $request->getParsedBody();
-            
+        // $body = $request->getParsedBody();        
+        // $mesAnoParam = $body["mesano"];
+        
         // return $response->withJson(array("ok" => true, 200));
         
         // ibge Rio do Sul
@@ -3208,12 +3209,12 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
                 $contador++;
             }
         }
-     
-        array("listaDadosCadastrados" => $aListaDadosCadastrados,
+    
+        $aDados = array("listaDadosCadastrados" => $aListaDadosCadastrados,
               "listaDadosInseridosNovos" => $aListaDadosInseridosNovos,
               "listaDadosErroInserirNovos" => $aListaDadosErroInserirNovos);
         
-        return $response->withJson($aListaDadosCadastrados, 200);
+        return $response->withJson($aDados, 200);
     }
     
     private function insereDadosAuxilioEmergencial($mesano, $codigoibge, $pagina){
