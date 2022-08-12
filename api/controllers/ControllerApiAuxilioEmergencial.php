@@ -3178,7 +3178,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         
             $pagina = 1;
     
-            $totalPagina = 40;
+            $totalPagina = 10;
             while ($contador <= $totalPagina) {
                 $pagina = $contador;
                 
@@ -3188,7 +3188,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
                             and mesano = $mesano 
                             and pagina = $pagina";
         
-                $aDados = $this->getQuery()->selectAll($sSql);
+                $aDados = false; //$this->getQuery()->selectAll($sSql);
                 
                 if(count($aDados)){
                     array_push($aListaDadosCadastrados, array(
@@ -3238,6 +3238,9 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
     }
     
     private function getListaAnos(){
+        
+        return array(202101);
+        
         return array(
             202004
             ,202005
