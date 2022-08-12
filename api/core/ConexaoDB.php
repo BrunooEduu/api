@@ -1,6 +1,7 @@
 <?php
 
-class ConexaoDB {
+class ConexaoDB
+{
 
     // Conexao Local
     // const HOST   = '127.0.0.1';
@@ -8,7 +9,7 @@ class ConexaoDB {
     // const DBNAME = 'sistemafinanceiro';
     // const USER   = 'postgres';
     // const PASS   = 'postgres';
-    
+
     const HOST   = 'db.vdcszqvvrwdqcnjvcoxt.supabase.co';
     const DBNAME = 'postgres';
     const PORT   = '5432';
@@ -17,14 +18,16 @@ class ConexaoDB {
 
     private static $conexao = null;
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (is_null(self::$conexao)) {
             self::conecta();
         }
         return self::$conexao;
     }
 
-    public static function conecta() {
+    public static function conecta()
+    {
         if (is_null(self::$conexao)) {
             self::$conexao = pg_connect('host=' . self::HOST . ' port=' . self::PORT . ' dbname=' . self::DBNAME . ' user=' . self::USER . ' password=' . self::PASS);
             if (self::$conexao === false) {
@@ -34,7 +37,8 @@ class ConexaoDB {
         return self::$conexao;
     }
 
-    public static function desconecta() {
+    public static function desconecta()
+    {
         $bFechou = true;
         if (!is_null(self::$conexao)) {
             $bFechou = pg_close(self::$conexao);
@@ -43,7 +47,8 @@ class ConexaoDB {
         return $bFechou;
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         self::desconecta();
     }
 }
