@@ -3,6 +3,7 @@
 header("Access-Control-Allow-Origin: true");
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 86400');
+
 date_default_timezone_set('America/Maceio');
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -45,6 +46,9 @@ class Routes
 
             // Auxilios
             $app->get('/auxilios', ControllerApiAuxilioEmergencial::class . ':getAuxilios');
+            
+            // AuxiliosTest
+            $app->get('/auxiliostest', ControllerApiAuxilioEmergencial::class . ':getAuxiliosTest');
 
             // Cadastrar lista de auxilios
             $app->post('/cadastrarauxilios', ControllerApiAuxilioEmergencial::class . ':cadastrarAuxilios');

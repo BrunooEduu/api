@@ -22,8 +22,15 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
 
         return $response->withJson($aDados, 200);
     }
+    
+    public function getAuxiliosTest(Request $request, /*@var $response MessageInterface */ Response $response, array $args)
+    {
+        $dados = new stdClass();
+        $dados->headers = $request->headers();
 
-
+        return $response->withJson($dados, 200);
+    }
+    
     private function getDadosAuxilio($pagina)
     {
 
