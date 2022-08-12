@@ -3188,7 +3188,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
                             and mesano = $mesano 
                             and pagina = $pagina";
         
-                $aDados = false; //$this->getQuery()->selectAll($sSql);
+                $aDados = array(); //$this->getQuery()->selectAll($sSql);
                 
                 if(count($aDados)){
                     array_push($aListaDadosCadastrados, array(
