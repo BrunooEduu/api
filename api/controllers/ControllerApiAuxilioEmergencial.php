@@ -3160,12 +3160,13 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         $body = $request->getParsedBody();
 
         $contador = 1;
-        $totalPagina = 10;
+        $totalPagina = 9;
+        $sSql = "";
         while ($contador <= $totalPagina) {
             $oDadosAuxilio = $this->getDadosAuxilioPorPagina($contador);
 
             // sql montado
-            $sSql = 'insert into auxilioemergencial(codigoibge, mesano, pagina, dados)
+            $sSql .= 'insert into auxilioemergencial(codigoibge, mesano, pagina, dados)
                 values(' . $body["codigoibge"] . ', ' . $body["mesano"] . ',
                 ' . $contador . ', \'' . json_encode($oDadosAuxilio) . '\');';
 
