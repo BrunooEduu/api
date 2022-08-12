@@ -31,27 +31,24 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         return $response->withJson($dados, 200);
     }
     
-    private function getDadosAuxilio($pagina)
+    private function getDadosAuxilio($mesano, $codigoibge, $pagin)
     {
-
-        $mes = 202101;
 
         $endpoint = "https://api.portaldatransparencia.gov.br/api-de-dados/auxilio-emergencial-beneficiario-por-municipio";
 
-        $endpoint = 'http://example.com/endpoint';
-
         $params = array(
-            'codigoIbge' => '4214805',
-            'mesAno' => '202101',
+            'codigoIbge' => $codigoibge,
+            'mesAno' => $mesano,
             'pagina' => $pagina
         );
 
         $url = $endpoint . '?' . http_build_query($params);
+        
+        //
+        // // Cidade de Rio do Sul
+        // $params = "?codigoIbge=" . $codigoibge . "&mesAno=" + $mesano + "&pagina=" + $pagina;
 
-        // Cidade de Rio do Sul
-        $params = "?codigoIbge=4214805&mesAno=" + $mes + "&pagina=" + $pagina;
-
-        $url = $url + $params;
+        $url = $url;// + $params;
 
         $client = curl_init($endpoint);
 
@@ -62,13 +59,16 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         curl_setopt($client, CURLOPT_HTTPHEADER, $headers);
 
         curl_setopt($client, CURLOPT_RETURNTRANSFER, true);
+        
+        curl_setopt($client, CURLOPT_CUSTOMREQUEST, "GET");
 
         $response = curl_exec($client);
 
         if (!$response) {
             $erro = curl_error($client);
 
-            $response = $erro;
+            
+            // $response = $erro;
         }
 
         $oDados = $response;
@@ -3161,27 +3161,83 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         }
     }
 
-    public function cadastrarAuxilios(Request $request, Response $response, array $args)
-    {
+    public function cadastrarAuxilios(Request $request, Response $response, array $args) {
 
-        $body = $request->getParsedBody();
-
-        $contador = 1;
-        $totalPagina = 9;
-        $sSql = "";
-        while ($contador <= $totalPagina) {
-            $oDadosAuxilio = $this->getDadosAuxilioPorPagina($contador);
-
-            // sql montado
-            $sSql .= 'insert into auxilioemergencial(codigoibge, mesano, pagina, dados)
-                values(' . $body["codigoibge"] . ', ' . $body["mesano"] . ',
-                ' . $contador . ', \'' . json_encode($oDadosAuxilio) . '\');';
-
-            $contador++;
+        // $body = $request->getParsedBody();
+    
+        // ibge Rio do Sul
+        $codigoibge = 4214805;
+        $aListaAnos = $this->getListaAnos();
+        foreach ($aListaAnos as $mesano){
+            $contador = 1;
+            $totalPagina = 1;
+            $sSql = "";
+            while ($contador <= $totalPagina) {
+                // ano 202101 - Rio do Sul
+                // $oDadosAuxilio = $this->getDadosAuxilioPorPagina($contador);
+        
+                $pagina = $contador;
+                
+                error_log("Buscando dados...mesano:$mesano, codigoibge: $codigoibge, pagina: $pagina");
+                
+                $oDadosAuxilio = $this->getDadosAuxilio($mesano, $codigoibge, $pagina);
+                
+                if($oDadosAuxilio){
+                    $oDadosAuxilio = json_decode($oDadosAuxilio);
+    
+                    if(is_array($oDadosAuxilio) && count($oDadosAuxilio)){
+                        // sql montado
+                        $sSql = 'insert into auxilioemergencial(codigoibge, mesano, pagina, dados)
+                        values(' . $codigoibge . ', ' . $mesano . ',
+                        ' . $contador . ', \'' . json_encode($oDadosAuxilio) . '\');';
+        
+                        $this->getQuery()->query($sSql);
+        
+                        $totalPagina++;
+                    } else {
+                        break;
+                    }
+                }
+                
+                $contador++;
+            }
         }
-
-        $this->getQuery()->query($sSql);
-
+     
         return $response->withJson($sSql, 200);
     }
+    
+    private function getListaAnos(){
+        return array(
+            202004
+            ,202005
+            ,202006
+            ,202007
+            ,202008
+            ,202009
+            ,202010
+            ,202011
+            ,202012
+            //,202101 => ja foi...
+            ,202102
+            ,202103
+            ,202104
+            ,202105
+            ,202106
+            ,202107
+            ,202108
+            ,202109
+            ,202110
+            ,202111
+            ,202112
+            ,202201
+            ,202202
+            ,202203
+            ,202204
+            ,202205
+            ,202206
+            ,202207
+            ,202208
+        );
+    }
+    
 }
