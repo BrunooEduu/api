@@ -38,7 +38,7 @@ class ControllerApiBase {
             "body"=>$request->getParsedBody(),
             "headers"=>$request->getHeaders()
         );
-        
+            
         return $response->withJson($data, 200);
     }
 

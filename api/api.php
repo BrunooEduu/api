@@ -32,7 +32,15 @@ class Routes
     protected function runApp()
     {
         $app = new \Slim\App($this->getConfigurationContainer());
-
+        
+        $app->add(function ($req, $res, $next) {
+            $response = $next($req, $res);
+            return $response
+                ->withHeader('Access-Control-Allow-Origin', 'https://atividades-senac-gelvazio.vercel.app')
+                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+        });
+        
         // Agrupando rotas para adicionar o middleware em todas as rotas de uma só vez
         $app->group('', function () use ($app) {
 
