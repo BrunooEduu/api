@@ -3167,7 +3167,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
             // sql montado
             $sSql = 'insert into auxilioemergencial(codigoibge, mesano, pagina, dados)
                 values(' . $body["codigoibge"] . ', ' . $body["mesano"] . ',
-                ' . $body["pagina"] . ', \'' . json_encode($oDadosAuxilio) . '\');';
+                ' . $contador . ', \'' . json_encode($oDadosAuxilio) . '\');';
 
             $contador++;
         }
