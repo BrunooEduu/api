@@ -3165,13 +3165,46 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
 
         // $body = $request->getParsedBody();
     
+        
+        // return $response->withJson(array("ok" => true, 200));
+        
         // ibge Rio do Sul
         $codigoibge = 4214805;
         $aListaAnos = $this->getListaAnos();
+        $aListaDadosCadastrados = array();
         foreach ($aListaAnos as $mesano){
             $contador = 1;
             $totalPagina = 1;
             $sSql = "";
+    
+    
+            $pagina = 1;
+    
+            $totalPagina = 40;
+            while ($contador <= $totalPagina) {
+                $pagina = $contador;
+                
+                $sSql = "select * 
+                           from auxilioemergencial 
+                          where codigoibge = $codigoibge
+                            and mesano = $mesano 
+                            and pagina = $pagina";
+        
+                $aDados = $this->getQuery()->selectAll($sSql);
+                
+                if(count($aDados)){
+                    array_push($aListaDadosCadastrados, array(
+                        "codigoibge" => $codigoibge,
+                        "mesano" => $mesano,
+                        "pagina" => $pagina
+                    ));
+                }
+                $contador++;
+            }
+            
+            continue;
+            
+            
             while ($contador <= $totalPagina) {
                 // ano 202101 - Rio do Sul
                 // $oDadosAuxilio = $this->getDadosAuxilioPorPagina($contador);
@@ -3203,7 +3236,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
             }
         }
      
-        return $response->withJson($sSql, 200);
+        return $response->withJson($aListaDadosCadastrados, 200);
     }
     
     private function getListaAnos(){
