@@ -17,6 +17,17 @@ class ControllerApiBase {
         return $response->withJson($data, 200);
     }
 
+    public function test(Request $request, Response $response, array $args) {
+        
+        $request_data = array(
+            "data" => date("Y-m-d H:i:s"),
+            "body"=>$request->getParsedBody(),
+            "headers"=>$request->headers()
+        );
+        
+        return $response->withJson($request_data, 200);
+    }
+
     /**
      *
      * @var ModelPadrao

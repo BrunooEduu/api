@@ -40,6 +40,8 @@ class Routes
             $app->get('/', ControllerApiBase::class . ':callPing');
 
             $app->get('/ping', ControllerApiBase::class . ':callPing');
+            
+            $app->get('/test', ControllerApiBase::class . ':test');
 
             // Cadastros
             $app->get('/users', ControllerApiUsuario::class . ':getUsuario');
