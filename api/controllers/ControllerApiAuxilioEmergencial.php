@@ -28,7 +28,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
                    where codigoibge = $codigoibge
                      and mesano = $mesAno 
                      and pagina = $pagina 
-                     and limit 100 ";
+                   limit 100 ";
 
         $aDados = $this->getQuery()->selectAll($sSql);
 
