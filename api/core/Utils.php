@@ -9,12 +9,10 @@
 
 //require_once 'lib/phpfastcache/phpfastcache.php';
 
-class Utils
-{
+class Utils {
 
-    public static function isServidorProducao()
-    {
-        return false;
+    public static function isServidorProducao() {
+        return boolval($_SERVER["APP_SERVIDOR_PRODUCAO"]);
     }
 
     public static function getCacheServer()

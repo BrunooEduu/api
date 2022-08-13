@@ -8,3 +8,12 @@ CREATE TABLE public.usuario (
 	usuativo int2 NOT NULL DEFAULT 1,
 	CONSTRAINT usuario_pkey PRIMARY KEY (usucodigo)
 );
+
+CREATE TABLE public.auxilioemergencial (
+	id serial NOT NULL,
+	codigoibge INT NOT NULL,
+	mesano INT NOT NULL,
+	pagina  INT NOT NULL,
+	dados jsonb not null default '{}'
+	CONSTRAINT auxilioemergencial_pkey PRIMARY KEY (id)
+);
