@@ -82,6 +82,7 @@ class ControllerApiUsuario extends ControllerApiBase {
         require_once ("./core/token.php");
         require_once ("./model/Usuario.php");
         
+        
         $body = $request->getParsedBody();
         
         $token_usuario = isset($body["token_logado"]) ? $body["token_logado"] : false;
