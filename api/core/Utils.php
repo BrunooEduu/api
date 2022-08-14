@@ -16,7 +16,7 @@ class Utils {
             return $_SERVER["APP_SERVIDOR_PRODUCAO"] === true;            
         }
         
-        return false;
+        return true;
     }
 
     public static function getCacheServer()
