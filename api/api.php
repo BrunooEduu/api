@@ -81,6 +81,7 @@ class Routes
             // Atividades
             $app->get('/atividades', ControllerApiAtividade::class . ':getAtividades');
             $app->post('/atividades', ControllerApiAtividade::class . ':gravaAtividades');
+            $app->delete('/atividades', ControllerApiAtividade::class . ':excluiAtividade');
             
         })->add($this->getMiddlewares());
 

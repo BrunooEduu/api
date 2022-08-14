@@ -9,11 +9,24 @@ require_once("ControllerApiBase.php");
 class ControllerApiAtividade extends ControllerApiBase {
 
     public function getAtividades(Request $request, Response $response, array $args) {
-        $sSql = "SELECT * FROM atividade ORDER BY 1";
+        $body = $request->getParsedBody();
         
-        $aDados = $this->getQuery()->selectAll($sSql);
+        $id = isset($body["id"]) ? $body["id"] : false;
+    
+        $aDados = $this->getListaAtividades($id);
         
         return $response->withJson($aDados, 200);
+    }
+    
+    private function getListaAtividades($id = false){
+        $condicao = "";
+        if($id){
+            $condicao = " where id = $id";
+        }
+    
+        $sSql = "SELECT * FROM atividade $condicao ORDER BY 1";
+    
+        return $this->getQuery()->selectAll($sSql);
     }
     
     public function gravaAtividades(Request $request, Response $response, array $args) {    
@@ -59,6 +72,19 @@ class ControllerApiAtividade extends ControllerApiBase {
         }
         
         return array();
+    }
+    
+    public function excluiAtividade(Request $request, Response $response, array $args) {
+        $body = $request->getParsedBody();
+        
+        $id = isset($body["id"]) ? $body["id"] : false;
+        $aDados = $this->getListaAtividades($id);
+        
+        if(count($aDados)){
+            $this->getQuery()->executaQuery("delete from atividade where id = $id");
+        }
+        
+        return $response->withJson(array("status" => true, "mensagem" => "Atividade excluida com sucesso!"), 200);
     }
       
 }

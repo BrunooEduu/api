@@ -10,6 +10,7 @@ class ConexaoDB
     // const USER   = 'postgres';
     // const PASS   = 'postgres';
 
+    // SUPABASE
     const HOST   = 'db.vdcszqvvrwdqcnjvcoxt.supabase.co';
     const DBNAME = 'postgres';
     const PORT   = '5432';
