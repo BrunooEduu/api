@@ -79,8 +79,8 @@ class Routes
             $app->post('/cadastrarauxilios', ControllerApiAuxilioEmergencial::class . ':cadastrarAuxilios');
             
             // Atividades
-            $app->get('/atividades', ControllerApiUsuario::class . ':getAtividades');
-            $app->post('/atividades', ControllerApiUsuario::class . ':gravaAtividades');
+            $app->get('/atividades', ControllerApiAtividade::class . ':getAtividades');
+            $app->post('/atividades', ControllerApiAtividade::class . ':gravaAtividades');
             
         })->add($this->getMiddlewares());
 

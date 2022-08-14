@@ -3,11 +3,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 /**
- * Chamada da api Usuario
- *
- * User: Gelvazio Camargo
- * Date: 10/12/2020
- * Time: 17:40
+ * Chamada da api Atividades
  */
 require_once("ControllerApiBase.php");
 class ControllerApiAtividade extends ControllerApiBase {
