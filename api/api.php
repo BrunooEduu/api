@@ -16,6 +16,7 @@ require_once("./controllers/ControllerApiBase.php");
 require_once("./controllers/ControllerApiUsuario.php");
 require_once("./controllers/ControllerApiAuxilioEmergencial.php");
 require_once("./controllers/ControllerApiUpdateDatabase.php");
+require_once("./controllers/ControllerApiAtividade.php");
 
 class Routes
 {
