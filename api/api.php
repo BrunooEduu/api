@@ -52,7 +52,7 @@ class Routes
             $app->get('/ping', ControllerApiBase::class . ':callPing');
             
             // update banco local
-            $app->put('/updatedatabase', ControllerApiUpdateDatabase::class . ':updateDatabase');
+            //$app->put('/updatedatabase', ControllerApiUpdateDatabase::class . ':updateDatabase');
             
             $app->get('/test', ControllerApiBase::class . ':test');
 
@@ -62,10 +62,10 @@ class Routes
             // Auxilios
             $app->get('/auxilios', ControllerApiAuxilioEmergencial::class . ':getAuxilios');
             
-            $app->get('/auxiliosapi', ControllerApiAuxilioEmergencial::class . ':getAuxiliosApi');
+            // $app->get('/auxiliosapi', ControllerApiAuxilioEmergencial::class . ':getAuxiliosApi');
             
             // AuxiliosTest
-            $app->get('/auxiliostest', ControllerApiAuxilioEmergencial::class . ':getAuxiliosTest');
+            // $app->get('/auxiliostest', ControllerApiAuxilioEmergencial::class . ':getAuxiliosTest');
 
             // Cadastrar lista de auxilios
             $app->post('/cadastrarauxilios', ControllerApiAuxilioEmergencial::class . ':cadastrarAuxilios');

@@ -62,16 +62,16 @@ class ControllerApiUpdateDatabase {
     }
     
     private function loadDataAuxilioEmergencial(){
-        var url = "https://api.portaldatransparencia.gov.br/api-de-dados/auxilio-emergencial-beneficiario-por-municipio";
-    
-        if (mes == undefined) {
-            mes = 202101;
-        }
-    
-        var params = "?codigoIbge=4214805&mesAno=" + mes + "&pagina=1";
-    
-    
-        url = url + params;
+        // var url = "https://api.portaldatransparencia.gov.br/api-de-dados/auxilio-emergencial-beneficiario-por-municipio";
+        //
+        // if (mes == undefined) {
+        //     mes = 202101;
+        // }
+        //
+        // var params = "?codigoIbge=4214805&mesAno=" + mes + "&pagina=1";
+        //
+        //
+        // url = url + params;
     
     }
 }

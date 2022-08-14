@@ -3275,50 +3275,50 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         );
     }
     
-    public function getAuxiliosApi(Request $request, Response $response, array $args) {
-        // ibge Rio do Sul 
-        $codigoibge = 4214805;
-        $aListaAnos = $this->getListaAnos();
-        $aListaDadosCadastrados = array();
-        $aListaDadosInseridosNovos = array();
-        $aListaDadosErroInserirNovos = array();
-        
-define("QUEBRA_LINHA", '
-');
-    
-        $sSql = "";
-        foreach ($aListaAnos as $mesano){
-            $contador = 1;
-            $totalPagina = 1;
-            while ($contador <= $totalPagina) {
-                $pagina = $contador;               
-                $aListaDadosCadastradosAtual = array(
-                    "codigoibge" => $codigoibge,
-                    "mesano" => $mesano,
-                    "pagina" => $pagina
-                );
-
-                // Busca os dados
-                $oDadosAuxilio = $this->getDadosAuxilio($mesano, $codigoibge, $pagina);
-    
-                if($oDadosAuxilio){
-                    array_push($aListaDadosCadastrados, $aListaDadosCadastradosAtual);
-                    
-                    $oDadosAuxilio = json_decode($oDadosAuxilio);
-        
-                    if(is_array($oDadosAuxilio) && count($oDadosAuxilio)){
-                        // sql
-                        $sSql .= QUEBRA_LINHA . 'insert into auxilioemergencial(codigoibge, mesano, pagina, dados) values(' . $codigoibge . ', ' . $mesano . ',' . $pagina . ', \'' . json_encode($oDadosAuxilio) . '\');';
-                    }
-                }
-                    
-                $contador++;
-            }
-        }
-        
-        file_put_contents(Utils::getDirTempFile() . "/listaDadosCadastradosAtual.json", json_encode($aListaDadosCadastrados));
-        
-        return $response->withJson($aListaDadosCadastradosAtual, 200);
-    }
-    
+//     public function getAuxiliosApi(Request $request, Response $response, array $args) {
+//         // ibge Rio do Sul 
+//         $codigoibge = 4214805;
+//         $aListaAnos = $this->getListaAnos();
+//         $aListaDadosCadastrados = array();
+//         $aListaDadosInseridosNovos = array();
+//         $aListaDadosErroInserirNovos = array();
+//        
+// define("QUEBRA_LINHA", '
+// ');
+//    
+//         $sSql = "";
+//         foreach ($aListaAnos as $mesano){
+//             $contador = 1;
+//             $totalPagina = 1;
+//             while ($contador <= $totalPagina) {
+//                 $pagina = $contador;               
+//                 $aListaDadosCadastradosAtual = array(
+//                     "codigoibge" => $codigoibge,
+//                     "mesano" => $mesano,
+//                     "pagina" => $pagina
+//                 );
+//
+//                 // Busca os dados
+//                 $oDadosAuxilio = $this->getDadosAuxilio($mesano, $codigoibge, $pagina);
+//    
+//                 if($oDadosAuxilio){
+//                     array_push($aListaDadosCadastrados, $aListaDadosCadastradosAtual);
+//                    
+//                     $oDadosAuxilio = json_decode($oDadosAuxilio);
+//        
+//                     if(is_array($oDadosAuxilio) && count($oDadosAuxilio)){
+//                         // sql
+//                         $sSql .= QUEBRA_LINHA . 'insert into auxilioemergencial(codigoibge, mesano, pagina, dados) values(' . $codigoibge . ', ' . $mesano . ',' . $pagina . ', \'' . json_encode($oDadosAuxilio) . '\');';
+//                     }
+//                 }
+//                    
+//                 $contador++;
+//             }
+//         }
+//        
+//         file_put_contents(Utils::getDirTempFile() . "/listaDadosCadastradosAtual.json", json_encode($aListaDadosCadastrados));
+//        
+//         return $response->withJson($aListaDadosCadastradosAtual, 200);
+//     }
+//    
 }
