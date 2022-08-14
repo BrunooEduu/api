@@ -29,33 +29,24 @@ class ConexaoDB
     {
         if (is_null(self::$conexao)) {
     
+            // Padrao conecta no Heroku...
             $HOST   = $_SERVER["APP_DATABASE_HOST"];
             $DBNAME = $_SERVER["APP_DATABASE_DBNAME"];
             $PORT   = $_SERVER["APP_DATABASE_PORT"];
             $USER   = $_SERVER["APP_DATABASE_USER"];
             $PASS   = $_SERVER["APP_DATABASE_PASS"];
-            
-            //
-            // throw new Exception('Erro ao comunicar com banco de dados!
-            //     <br>host:' . $HOST . ' 
-            //     <br>dbname : '. $DBNAME .'
-            //     <br>port : '. $PORT .'
-            //     <br>user : '. $USER .'
-            //     <br>pass : '. $PASS
-            // );
-            //
-            
+ 
             if(Utils::isServidorProducao()){
-                $HOST   = 'db.vdcszqvvrwdqcnjvcoxt.supabase.co';
-                $DBNAME = 'postgres';
-                $PORT   = '5432';
-                $USER   = 'postgres';
-                $PASS   = 'mB9C@SywfzkJzmS';                
+                // Producao conecta na supabase    
+                $HOST   = $_SERVER["APP_SUPABASE_DATABASE_HOST"];
+                $DBNAME = $_SERVER["APP_SUPABASE_DATABASE_DBNAME"];
+                $PORT   = $_SERVER["APP_SUPABASE_DATABASE_PORT"];
+                $USER   = $_SERVER["APP_SUPABASE_DATABASE_USER"];
+                $PASS   = $_SERVER["APP_SUPABASE_DATABASE_PASS"];
             }
-            
             self::$conexao = pg_connect('host=' . $HOST . ' port=' . $PORT . ' dbname=' . $DBNAME . ' user=' . $USER . ' password=' . $PASS);
             if (self::$conexao === false) {
-                throw new Exception('Erro ao comunicar com banco de dados!');
+                throw new Exception('Erro ao comunicar com banco de dados!' . pg_last_error());
             }
         }
         return self::$conexao;

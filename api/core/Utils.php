@@ -12,7 +12,7 @@
 class Utils {
 
     public static function isServidorProducao() {
-        return true;//boolval($_SERVER["APP_SERVIDOR_PRODUCAO"]);
+        return true;
     }
 
     public static function getCacheServer()
