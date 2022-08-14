@@ -82,7 +82,6 @@ class ControllerApiUsuario extends ControllerApiBase {
         require_once ("./core/token.php");
         require_once ("./model/Usuario.php");
         
-        
         $body = $request->getParsedBody();
         
         $token_usuario = isset($body["token_logado"]) ? $body["token_logado"] : false;
@@ -92,7 +91,12 @@ class ControllerApiUsuario extends ControllerApiBase {
             $dadosLogin = $this->loginComSenha($body);
         }
     
-        return $response->withJson($dadosLogin, 200);        
+        // return $response->withJson($dadosLogin, 200);
+        
+        $usuemail = $body["usuemail"];
+        $ususenha = $body["ususenha"];
+        
+        return $response->withJson(array("usuemail" => $usuemail, "ususenha" => $ususenha), 200);        
     }
     
     private function loginComToken($token_logado){
