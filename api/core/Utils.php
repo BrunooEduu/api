@@ -12,8 +12,8 @@
 class Utils {
 
     public static function isServidorProducao() {
-        if(isset($_SERVER["APP_SERVIDOR_PRODUCAO"])){
-            return boolval($_SERVER["APP_SERVIDOR_PRODUCAO"]);            
+        if(isset($_SERVER["APP_SERVIDOR_PRODUCAO"])){            
+            return $_SERVER["APP_SERVIDOR_PRODUCAO"] === true;            
         }
         
         return false;
