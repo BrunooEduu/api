@@ -20,7 +20,7 @@ class ControllerApiAtividade extends ControllerApiBase {
         $body = $request->getParsedBody();
         
         $descricaoAtividade = $body["descricaoAtividade"];
-        $dataAtividade = isset($body["data"]) ? $body["data"] : false;
+        $dataAtividade = isset($body["data"]) ? (int)$body["data"] : false;
     
         $aDadosAtividade = $this->gravaAtividadeBanco($descricaoAtividade, $dataAtividade);
         
@@ -29,11 +29,11 @@ class ControllerApiAtividade extends ControllerApiBase {
     
     private function gravaAtividadeBanco($descricaoAtividade, $data = false){
         if(!$data){
-            $data = (string)date("Y-m-d");            
+            $data = (int)date("Y-m-d");            
         }
         
         $sql_insert = 'insert into atividade(data, status, atividade) values ( 
-          \'' . $data . '\',
+          ' . $data . ',
           \'status_not_verified\',
           \'' . $descricaoAtividade . '\'
         );';
