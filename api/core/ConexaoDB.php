@@ -38,11 +38,18 @@ class ConexaoDB
  
             if(Utils::isServidorProducao()){
                 // Producao conecta na supabase    
-                $HOST   = $_SERVER["APP_SUPABASE_DATABASE_HOST"];
-                $DBNAME = $_SERVER["APP_SUPABASE_DATABASE_DBNAME"];
-                $PORT   = $_SERVER["APP_SUPABASE_DATABASE_PORT"];
-                $USER   = $_SERVER["APP_SUPABASE_DATABASE_USER"];
-                $PASS   = $_SERVER["APP_SUPABASE_DATABASE_PASS"];
+                $HOST   = self::HOST;
+                $DBNAME = self::DBNAME;
+                $PORT   = self::PORT;
+                $USER   = self::USER;
+                $PASS   = self::PASS;
+                
+                // $HOST   = self::HOST;
+                // $_SERVER["APP_SUPABASE_DATABASE_HOST"];
+                // $DBNAME = $_SERVER["APP_SUPABASE_DATABASE_DBNAME"];
+                // $PORT   = $_SERVER["APP_SUPABASE_DATABASE_PORT"];
+                // $USER   = $_SERVER["APP_SUPABASE_DATABASE_USER"];
+                // $PASS   = $_SERVER["APP_SUPABASE_DATABASE_PASS"];
             }
             
             self::$conexao = pg_connect('host=' . $HOST . ' port=' . $PORT . ' dbname=' . $DBNAME . ' user=' . $USER . ' password=' . $PASS);
