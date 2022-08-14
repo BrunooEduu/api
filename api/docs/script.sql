@@ -16,3 +16,21 @@ CREATE TABLE public.auxilioemergencial (
 	dados jsonb not null default '{}'
 	CONSTRAINT auxilioemergencial_pkey PRIMARY KEY (id)
 );
+
+CREATE TABLE public.atividade (
+	id serial NOT NULL,
+	data INT NOT NULL,
+	status varchar(100) default 'status_not_verified',
+	atividade text,
+	CONSTRAINT atividade_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE public.feedback (
+	id serial NOT NULL,
+	usucodigo INT NOT NULL,
+	idatividade INT NOT NULL,
+	feedback text null,
+	CONSTRAINT feedback_pkey PRIMARY KEY (id),
+	CONSTRAINT feedback_usuario_fkey FOREIGN KEY (usucodigo) REFERENCES public.usuario(usucodigo),
+	CONSTRAINT feedback_atividade_fkey FOREIGN KEY (idatividade) REFERENCES public.atividade(id)
+);
