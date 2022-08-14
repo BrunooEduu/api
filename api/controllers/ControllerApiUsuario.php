@@ -90,13 +90,8 @@ class ControllerApiUsuario extends ControllerApiBase {
         } else {
             $dadosLogin = $this->loginComSenha($body);
         }
-    
-        // return $response->withJson($dadosLogin, 200);
         
-        $usuemail = $body["usuemail"];
-        $ususenha = $body["ususenha"];
-        
-        return $response->withJson(array("usuemail" => $usuemail, "ususenha" => $ususenha, "login" => $dadosLogin), 200);        
+        return $response->withJson(array("dadoslogin" => $dadosLogin), 200);        
     }
     
     private function loginComToken($token_logado){
