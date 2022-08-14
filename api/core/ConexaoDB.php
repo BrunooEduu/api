@@ -47,7 +47,7 @@ class ConexaoDB
             
             self::$conexao = pg_connect('host=' . $HOST . ' port=' . $PORT . ' dbname=' . $DBNAME . ' user=' . $USER . ' password=' . $PASS);
             if (self::$conexao === false) {
-                throw new Exception('Erro ao comunicar com banco de dados!' . pg_last_error());
+                throw new Exception('Erro ao comunicar com banco de dados!');
             }
         }
         return self::$conexao;
