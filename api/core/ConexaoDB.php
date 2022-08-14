@@ -44,6 +44,7 @@ class ConexaoDB
                 $USER   = $_SERVER["APP_SUPABASE_DATABASE_USER"];
                 $PASS   = $_SERVER["APP_SUPABASE_DATABASE_PASS"];
             }
+            
             self::$conexao = pg_connect('host=' . $HOST . ' port=' . $PORT . ' dbname=' . $DBNAME . ' user=' . $USER . ' password=' . $PASS);
             if (self::$conexao === false) {
                 throw new Exception('Erro ao comunicar com banco de dados!' . pg_last_error());
