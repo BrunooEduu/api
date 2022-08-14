@@ -7,71 +7,62 @@ class ControllerApiUpdateDatabase {
     
     public function updateDatabase(Request $request, Response $response, array $args) {
         
+        $users      = $this->updateUsers();
+        $atividades = $this->updateAtividades();
+        $feedbacks  = $this->updateFeedbacks();
+        $auxilios   = $this->updateAuxilios();
         
-        $file_csv_1 = file_get_contents('docs/auxilioemergencial_rows_1.csv');
-        
-        $aDados = explode(";", $file_csv_1);
+        return $response->withJson(array(
+            "users"      => array("statusOk"   => $users),
+            "atividades" => array("atividades" => $atividades),
+            "feedbacks"  => array("feedbacks"  => $feedbacks),
+            "auxilios"   => array("auxilios"   => $auxilios)
+        ),200);
+    }
     
-        $dados_01 = "NADA";
+    private function updateAtividades(){
+        return true;
+    }
+    
+    private function updateFeedbacks(){
+        return true;
+    }
+    
+    private function updateAuxilios(){ 
+        return true; 
+    }
+    
+    private function updateUsers(){
+        // carrega os dados do heroku
+        $_SERVER["APP_SERVIDOR_PRODUCAO"] = true;
         
-        $xDados = "false";
-        $id = 0;
-        $id2 = 0;
-        $id3 = 0;
-        $id4 = 0;
-        foreach ($aDados as $oDados){
-            $xDados = $oDados;
+        $sql = "select * from usuario";
+        $aDadosHeroku = $this->getQuery()->selectAll($sql);
+        
+        // carrega os dados da Supabase
+        $_SERVER["APP_SERVIDOR_PRODUCAO"] = false;
+        $aDadosSupabase = $this->getQuery()->selectAll($sql);
+        
+        $aDadosAtualizarSupabase = array();
+        foreach ($aDadosHeroku as $oDados){
+            // verifica se tem dados do heroku e nao tem na Supabase
+            $existeSupabase = false;
+            foreach ($aDadosSupabase as $oDadosSupabase){
+                if($oDadosSupabase["usuemail"] == $oDados["usuemail"]){
+                    $existeSupabase = true;
+                    break;
+                }
+            }            
             
-            
-            
-            $oDados = explode(",", $oDados);
-            $id  = $oDados[0];
-            $id2 = $oDados[1];
-            $id3 = $oDados[2];
-            $id4 = $oDados[3];
-            
-            $string_dados = $id . ',' . $id2 . ',' .  $id3 . ',';
-            
-            //$length = strlen($id . ',' . $id2 . ',' .  $id3 . ',' . $id4);
-            
-            $nova_string = str_replace($string_dados, '', $xDados);
-            
-            $oDadosObject = json_decode($nova_string);
-            
-            $dados_01 .= $oDados[0];
-            $dados_01 .= $oDados[1];
-            $dados_01 .= $oDados[2];
-            $dados_01 .= $oDados[3];
-            
-            
-            break;
+            if(!$existeSupabase){
+                array_push($aDadosAtualizarSupabase, $oDados);
+            }
         }
         
-        // buscando dados da api
+        // Atualiza a Supabase
         
-        return $response->withJson(
-            array("id" => $id,
-                "id2" => $id2,
-                "id3" => $id3,
-                "id4" => $id4,
-                "statusOk" => $xDados), 200);
-
-        
-        
-        //return $response->withJson(array("statusOk" => true), 200);
+        return true;
     }
     
-    private function loadDataAuxilioEmergencial(){
-        // var url = "https://api.portaldatransparencia.gov.br/api-de-dados/auxilio-emergencial-beneficiario-por-municipio";
-        //
-        // if (mes == undefined) {
-        //     mes = 202101;
-        // }
-        //
-        // var params = "?codigoIbge=4214805&mesAno=" + mes + "&pagina=1";
-        //
-        //
-        // url = url + params;
-    
-    }
+ 
 }

@@ -13,10 +13,10 @@ class Utils {
 
     public static function isServidorProducao() {
         if(isset($_SERVER["APP_SERVIDOR_PRODUCAO"])){            
-            return $_SERVER["APP_SERVIDOR_PRODUCAO"] === true;            
+            // return $_SERVER["APP_SERVIDOR_PRODUCAO"] === true;            
         }
         
-        return true;
+        return false;
     }
 
     public static function getCacheServer()

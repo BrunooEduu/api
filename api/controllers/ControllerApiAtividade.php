@@ -29,7 +29,19 @@ class ControllerApiAtividade extends ControllerApiBase {
     
     private function gravaAtividadeBanco($descricaoAtividade, $data = false){
         if(!$data){
-            $data = (int)date("Y-m-d");            
+            $ano = (int)date("Y");
+            $mes = (int)date("m");
+            $dia = (int)date("d");
+            
+            if($mes < 10){
+                $mes = '0' . $mes;
+            }
+            
+            if($dia < 10){
+                $dia = '0' . $dia;
+            }            
+            
+            $data = (int) $ano . $mes . $dia;   
         }
         
         $sql_insert = 'insert into atividade(data, status, atividade) values ( 
