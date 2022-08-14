@@ -58,6 +58,8 @@ class Routes
 
             // Cadastros
             $app->get('/users', ControllerApiUsuario::class . ':getUsuario');
+            $app->post('/users', ControllerApiUsuario::class . ':gravaUsuario');
+            $app->post('/login', ControllerApiUsuario::class . ':loginUsuario');
 
             // Auxilios
             $app->get('/auxilios', ControllerApiAuxilioEmergencial::class . ':getAuxilios');

@@ -72,8 +72,6 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
 
         if (!$response) {
             $erro = curl_error($client);
-            
-            // $response = $erro;
         }
 
         $oDados = $response;
@@ -3229,7 +3227,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
                         values(' . $codigoibge . ', ' . $mesano . ',
                         ' . $pagina . ', \'' . json_encode($oDadosAuxilio) . '\');';
             
-                if($this->getQuery()->query($sSql, true)){
+                if($this->getQuery()->executaQuery($sSql, true)){
                     return $oDadosAuxilio;
                 }
             }

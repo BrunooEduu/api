@@ -10,7 +10,7 @@ class Query {
     }
 
     public function select($sSql) {
-        $rSql = $this->query($sSql);
+        $rSql = $this->executaQuery($sSql);
         if ($oLinhaAtual = pg_fetch_assoc($rSql)) {
             return $oLinhaAtual;
         }
@@ -18,7 +18,7 @@ class Query {
     }
 
     public function selectAll($sSql) {
-        $rSql = $this->query($sSql);
+        $rSql = $this->executaQuery($sSql);
         $aRetorno = Array();
         while ($oLinhaAtual = pg_fetch_assoc($rSql)) {
             $aRetorno[] = $oLinhaAtual;
@@ -26,7 +26,7 @@ class Query {
         return $aRetorno;
     }
 
-    public function query($sSql, $retornoBoolean = false) {
+    public function executaQuery($sSql, $retornoBoolean = false) {
         $rRetorno = @pg_query($this->conexao, $sSql);
         if ($rRetorno !== false) {
             return $rRetorno;
@@ -36,7 +36,7 @@ class Query {
             return false;    
         }
         
-        throw new Exception('Erro ao executar comando SQL');
+        throw new Exception('Erro ao executar comando SQL.Erro: ' . pg_last_error($this->conexao));
     }
 
 }
