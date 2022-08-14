@@ -55,11 +55,16 @@ class Routes
             //$app->put('/updatedatabase', ControllerApiUpdateDatabase::class . ':updateDatabase');
             
             $app->get('/test', ControllerApiBase::class . ':test');
+            $app->put('/test', ControllerApiBase::class . ':test');
+            $app->post('/test', ControllerApiBase::class . ':test');
+            $app->delete('/test', ControllerApiBase::class . ':test');
 
             // Cadastros
             $app->get('/users', ControllerApiUsuario::class . ':getUsuario');
             $app->post('/users', ControllerApiUsuario::class . ':gravaUsuario');
             $app->post('/login', ControllerApiUsuario::class . ':loginUsuario');
+            
+            //$app->get('/logintest', ControllerApiUsuario::class . ':loginUsuario');
 
             // Auxilios
             $app->get('/auxilios', ControllerApiAuxilioEmergencial::class . ':getAuxilios');
