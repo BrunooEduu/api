@@ -15,6 +15,7 @@ require_once("./core/Utils.php");
 require_once("./controllers/ControllerApiBase.php");
 require_once("./controllers/ControllerApiUsuario.php");
 require_once("./controllers/ControllerApiAuxilioEmergencial.php");
+require_once("./controllers/ControllerApiUpdateDatabase.php");
 
 class Routes
 {
@@ -47,7 +48,11 @@ class Routes
             // Pagina inicial da api
             $app->get('/', ControllerApiBase::class . ':callPing');
 
+            // Ping
             $app->get('/ping', ControllerApiBase::class . ':callPing');
+            
+            // update banco local
+            $app->put('/updatedatabase', ControllerApiUpdateDatabase::class . ':updateDatabase');
             
             $app->get('/test', ControllerApiBase::class . ':test');
 
@@ -56,6 +61,8 @@ class Routes
 
             // Auxilios
             $app->get('/auxilios', ControllerApiAuxilioEmergencial::class . ':getAuxilios');
+            
+            $app->get('/auxiliosapi', ControllerApiAuxilioEmergencial::class . ':getAuxiliosApi');
             
             // AuxiliosTest
             $app->get('/auxiliostest', ControllerApiAuxilioEmergencial::class . ':getAuxiliosTest');

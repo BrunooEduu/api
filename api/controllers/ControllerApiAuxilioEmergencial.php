@@ -43,7 +43,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         return $response->withJson($dados, 200);
     }
     
-    private function getDadosAuxilio($mesano, $codigoibge, $pagin)
+    private function getDadosAuxilio($mesano, $codigoibge, $pagina)
     {
 
         $endpoint = "https://api.portaldatransparencia.gov.br/api-de-dados/auxilio-emergencial-beneficiario-por-municipio";
@@ -55,12 +55,6 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
         );
 
         $url = $endpoint . '?' . http_build_query($params);
-        
-        //
-        // // Cidade de Rio do Sul
-        // $params = "?codigoIbge=" . $codigoibge . "&mesAno=" + $mesano + "&pagina=" + $pagina;
-
-        $url = $url;// + $params;
 
         $client = curl_init($endpoint);
 
@@ -78,7 +72,6 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
 
         if (!$response) {
             $erro = curl_error($client);
-
             
             // $response = $erro;
         }
@@ -3174,12 +3167,6 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
     }
 
     public function cadastrarAuxilios(Request $request, Response $response, array $args) {
-
-        // $body = $request->getParsedBody();        
-        // $mesAnoParam = $body["mesano"];
-        
-        // return $response->withJson(array("ok" => true, 200));
-        
         // ibge Rio do Sul 
         $codigoibge = 4214805;
         $aListaAnos = $this->getListaAnos();
@@ -3286,6 +3273,52 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
             ,202207
             ,202208
         );
+    }
+    
+    public function getAuxiliosApi(Request $request, Response $response, array $args) {
+        // ibge Rio do Sul 
+        $codigoibge = 4214805;
+        $aListaAnos = $this->getListaAnos();
+        $aListaDadosCadastrados = array();
+        $aListaDadosInseridosNovos = array();
+        $aListaDadosErroInserirNovos = array();
+        
+define("QUEBRA_LINHA", '
+');
+    
+        $sSql = "";
+        foreach ($aListaAnos as $mesano){
+            $contador = 1;
+            $totalPagina = 1;
+            while ($contador <= $totalPagina) {
+                $pagina = $contador;               
+                $aListaDadosCadastradosAtual = array(
+                    "codigoibge" => $codigoibge,
+                    "mesano" => $mesano,
+                    "pagina" => $pagina
+                );
+
+                // Busca os dados
+                $oDadosAuxilio = $this->getDadosAuxilio($mesano, $codigoibge, $pagina);
+    
+                if($oDadosAuxilio){
+                    array_push($aListaDadosCadastrados, $aListaDadosCadastradosAtual);
+                    
+                    $oDadosAuxilio = json_decode($oDadosAuxilio);
+        
+                    if(is_array($oDadosAuxilio) && count($oDadosAuxilio)){
+                        // sql
+                        $sSql .= QUEBRA_LINHA . 'insert into auxilioemergencial(codigoibge, mesano, pagina, dados) values(' . $codigoibge . ', ' . $mesano . ',' . $pagina . ', \'' . json_encode($oDadosAuxilio) . '\');';
+                    }
+                }
+                    
+                $contador++;
+            }
+        }
+        
+        file_put_contents(Utils::getDirTempFile() . "/listaDadosCadastradosAtual.json", json_encode($aListaDadosCadastrados));
+        
+        return $response->withJson($aListaDadosCadastradosAtual, 200);
     }
     
 }

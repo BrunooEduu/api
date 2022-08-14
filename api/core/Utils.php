@@ -174,4 +174,8 @@ class Utils {
         // Retorna a conexao
         return $conexaoBancoDados;
     }
+    
+    public static function getDirTempFile() {
+        return "/var/www/html/temp";        
+    }
 }
