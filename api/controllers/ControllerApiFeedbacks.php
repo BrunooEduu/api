@@ -11,14 +11,16 @@ class ControllerApiFeedbacks extends ControllerApiBase {
     public function index(Request $request, Response $response, array $args) {
         $body = $request->getParsedBody();
         
-        $id = isset($body["id"]) ? $body["id"] : false;
-    
-        $aDados = $this->getListAll($id);
+        $id          = $body["id"];        
+        $usucodigo   = $body["usucodigo"];
+        $idatividade = $body["idatividade"];
+        
+        $aDados = $this->getListAll($id, $usucodigo, $idatividade, true);
         
         return $response->withJson($aDados, 200);
     }
     
-    private function getListAll($id = false, $usucodigo = false, $idatividade = false){
+    private function getListAll($id = false, $usucodigo = false, $idatividade = false, $bIndex = false){
         $condicao = " where 1 = 1 ";
         if($usucodigo){
             $condicao .= " and usucodigo = $usucodigo";
@@ -28,9 +30,13 @@ class ControllerApiFeedbacks extends ControllerApiBase {
         }
         if($id){
             $condicao .= " and id = $id";
+        }        
+    
+        // Usuario 1 - Admim, lista tudo
+        if($bIndex && $usucodigo == 1){
+            $condicao = "";
         }
         
-    
         $sSql = "SELECT * FROM feedback $condicao ORDER BY 1";
     
         return $this->getQuery()->selectAll($sSql);

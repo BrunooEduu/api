@@ -10,10 +10,21 @@ use Psr\Http\Message\ResponseInterface as Response;
  * Time: 17:40
  */
 require_once("ControllerApiBase.php");
+require_once ("./core/token.php");
+require_once ("./model/Usuario.php");
 class ControllerApiUsuario extends ControllerApiBase {
 
     public function getUsuario(Request $request, Response $response, array $args) {
-        $sSql = "SELECT * FROM usuario ORDER BY 1";
+        $body = $request->getParsedBody();
+        $usucodigo = isset($body["usucodigo"]) ? $body["usucodigo"] : false;
+        
+        $sSql = "SELECT * FROM usuario where 1 = 2 ORDER BY 1";            
+        if($usucodigo){
+            $sSql = "SELECT * FROM usuario where usucodigo = $usucodigo ORDER BY 1";
+            if($usucodigo == 1){
+                $sSql = "SELECT * FROM usuario ORDER BY 1";
+            }
+        }
         
         $aDados = $this->getQuery()->selectAll($sSql);
         
@@ -36,14 +47,7 @@ class ControllerApiUsuario extends ControllerApiBase {
         $oUsuario->setUsusenha(bcrypt($body["ususenha"]));
         
         $body["usutoken"] = $token;
-    
-        // Decodifica o token, como testes...
-        $token_decode = decodeToken($token);        
-        $body["token_decode"] = $token_decode;
-    
-        $aDadosUsuario = $this->gravaUsuarioBanco($oUsuario);
-            
-        $body["UsuarioBanco"] = $aDadosUsuario;            
+        $body["UsuarioBanco"] = $this->gravaUsuarioBanco($oUsuario);;            
         
         return $response->withJson($body, 200);
     }
@@ -79,9 +83,6 @@ class ControllerApiUsuario extends ControllerApiBase {
     }
     
     public function loginUsuario(Request $request, Response $response, array $args) {
-        require_once ("./core/token.php");
-        require_once ("./model/Usuario.php");
-        
         $body = $request->getParsedBody();
         
         $token_usuario = isset($body["token_logado"]) ? $body["token_logado"] : false;
@@ -128,17 +129,20 @@ class ControllerApiUsuario extends ControllerApiBase {
                 $aDadosUsuario["ususenha"],
                 $aDadosUsuario["usutoken"],
                 $aDadosUsuario["usuativo"]);
-        
-            $api_key = "769E46AAD7AD1833E3174B6E88CCC-F373C6DC6367A967B242CA4CCDDA2";
+    
+            $oUsuario->setUsucodigo($aDadosUsuario["usucodigo"]);
+            
+            // $api_key = "769E46AAD7AD1833E3174B6E88CCC-F373C6DC6367A967B242CA4CCDDA2";
         
             // Decodifica o token do usuario
-            $token_decode = decodeToken($oUsuario->getUsutoken(), $api_key);
+            // $token_decode = decodeToken($oUsuario->getUsutoken(), $api_key);
         
-            $senha_banco_dados = $token_decode->ususenha;
+            $senha_banco_dados = $aDadosUsuario["ususenha"];
             if (password_verify($senha_informada, $senha_banco_dados)) {
                 $aDadosUsuario             = array();
                 $aDadosUsuario["login"]    = true;
                 $aDadosUsuario["token"]    = $oUsuario->getUsutoken();
+                $aDadosUsuario["usucodigo"]= $oUsuario->getUsucodigo();
                 $aDadosUsuario["usunome"]  = $oUsuario->getUsunome();
                 $aDadosUsuario["usuemail"] = $oUsuario->getUsuemail();
                 $aDadosUsuario["mensagem"] = "Usuario validado com sucesso!";
@@ -149,5 +153,53 @@ class ControllerApiUsuario extends ControllerApiBase {
     
         return $aDadosUsuarioResponse;
     }
-      
+    
+    public function updatePassword(Request $request, Response $response, array $args) {
+        $body = $request->getParsedBody();
+        $oUsuario = $this->loginComSenha($body);
+    
+        $aDados = array("status" => false, "mensagem" => "Erro ao alterar senha...");
+        if($oUsuario && $oUsuario["login"]){
+            $usucodigo = (int)$oUsuario["usucodigo"];
+            if($oModelUsuario = $this->updateDadosBanco($usucodigo, $body["ususenha_nova"])){
+                $aDados = array("status" => true, "Usuario" => $oModelUsuario);                
+            }
+        }
+        
+        return $response->withJson($aDados, 200);
+    }
+    
+    private function updateDadosBanco($usucodigo, $ususenha){
+        $ususenha = bcrypt($ususenha);
+        
+        list($oUsuario, $aDadosUsuario) = $this->getModelUsuario($usucodigo);
+        
+        // Atualiza o token do usuario        
+        $token = encodeToken($oUsuario);
+        
+        if($this->getQuery()->executaQuery("update usuario set ususenha = '$ususenha', usutoken = '$token' 
+                                             where usucodigo = $usucodigo")){
+            return $aDadosUsuario;
+        }
+        
+        return false;
+    }
+    
+    private function getModelUsuario($usucodigo){
+        $sql_usuario = "select * from usuario where usucodigo = $usucodigo";
+    
+        if($aDados = $this->getQuery()->selectAll($sql_usuario)){
+            $aDadosUsuario = $aDados[0];
+            $oUsuario = new Usuario($aDadosUsuario["usunome"],
+                $aDadosUsuario["usuemail"],
+                $aDadosUsuario["ususenha"],
+                $aDadosUsuario["usutoken"],
+                $aDadosUsuario["usuativo"]);
+            
+            return array($oUsuario, $aDadosUsuario);
+        }
+        
+        return false;
+    }
+    
 }
