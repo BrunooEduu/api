@@ -10,12 +10,18 @@ class ControllerApiFeedbacks extends ControllerApiBase {
 
     public function index(Request $request, Response $response, array $args) {
         $body = $request->getParsedBody();
+    
+        $aDados = array();
+            
+        $token_logado = $body["token_logado"];
+        if($token_logado){
+            $id          = $body["id"];        
+            $usucodigo   = $body["usucodigo"];
+            $idatividade = $body["idatividade"];            
+            
+            $aDados = $this->getListAll($id, $usucodigo, $idatividade, true);
+        }
         
-        $id          = $body["id"];        
-        $usucodigo   = $body["usucodigo"];
-        $idatividade = $body["idatividade"];
-        
-        $aDados = $this->getListAll($id, $usucodigo, $idatividade, true);
         
         return $response->withJson($aDados, 200);
     }

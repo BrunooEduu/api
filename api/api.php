@@ -87,6 +87,7 @@ class Routes
             
             // Feedbacks
             $app->get('/feedbacks', ControllerApiFeedbacks::class . ':index');
+            $app->post('/feedbackslist', ControllerApiFeedbacks::class . ':index');
             $app->post('/feedbacks', ControllerApiFeedbacks::class . ':store');
             $app->put('/feedbacks', ControllerApiFeedbacks::class . ':update');
             
