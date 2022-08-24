@@ -48,7 +48,7 @@ class Routes
         $app->group('', function () use ($app) {
 
             // Pagina inicial da api
-            $app->get('/', ControllerApiBase::class . ':callPing');
+            $app->get('/', ControllerApiBase::class . ':home');
 
             // Ping
             $app->get('/ping', ControllerApiBase::class . ':callPing');

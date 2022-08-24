@@ -12,10 +12,18 @@ use Psr\Http\Message\ResponseInterface as Response;
 require_once("core/Query.php");
 class ControllerApiBase {
 
+    public function home(Request $request, Response $response, array $args) {
+        $data = array(
+            "data" => date("Y-m-d H:i:s"),
+            "body"=>$request->getParsedBody(),
+            "headers"=>$request->getHeaders()
+        );
+    
+        return $response->withJson($data, 200);
+    }
+    
     public function callPing(Request $request, Response $response, array $args) {
         $data = array("data" => date("Y-m-d H:i:s"));
-    
-        header('Content-Type: application/json; charset=utf-8');
         
         return $response->withJson($data, 200);
     }
