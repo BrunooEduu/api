@@ -15,9 +15,9 @@ class ControllerApiFeedbacks extends ControllerApiBase {
             
         $token_logado = $body["token_logado"];
         if($token_logado){
-            $id          = $body["id"];        
-            $usucodigo   = $body["usucodigo"];
-            $idatividade = $body["idatividade"];            
+            $id          = isset($body["id"]) ? $body["id"] : false;        
+            $usucodigo   = isset($body["usucodigo"]) ? $body["usucodigo"] : false;
+            $idatividade = isset($body["idatividade"]) ? $body["idatividade"] : false;            
             
             $aDados = $this->getListAll($id, $usucodigo, $idatividade, true);
         }
@@ -51,11 +51,11 @@ class ControllerApiFeedbacks extends ControllerApiBase {
     public function store(Request $request, Response $response, array $args) {    
         $body = $request->getParsedBody();
         
-        $usucodigo = $body["usucodigo"];
+        $usucodigo = isset($body["usucodigo"]) ? $body["usucodigo"] : false;
         $idatividade = $body["idatividade"];
         $descricaofeedback = $body["descricaofeedback"];    
         
-        $aDados = $this->gravaDadosBanco($usucodigo, $idatividade, $descricaofeedback);
+        $aDados = $this->gravaDadosBanco($idatividade, $descricaofeedback, $usucodigo);
         
         return $response->withJson($aDados, 200);
     }    
@@ -89,31 +89,56 @@ class ControllerApiFeedbacks extends ControllerApiBase {
         return $aDadosFeedback;
     }
     
-    private function gravaDadosBanco($usucodigo, $idatividade, $descricaofeedback){
+    private function gravaDadosBanco($idatividade, $descricaofeedback, $usucodigo = false){
+        if((int)$usucodigo > 0){
+            $aDadosFeedback = $this->insereAtividadePorUsuario($idatividade, $descricaofeedback, $usucodigo);            
+        } else {
+            // insere atividade para todos os usuarios
+            $aListaUsuarios = $this->getQuery()->selectAll("select * from usuario order by usucodigo");
+            
+            $aDadosFeedback = array();
+            
+            foreach ($aListaUsuarios as $usucodigoAtividade){
+                $this->insereAtividadePorUsuario($idatividade, $descricaofeedback, $usucodigoAtividade);
+                
+                $aDadosFeedback = $this->getListAll(false, $usucodigoAtividade, $idatividade);
+            }
+    
+            if(count($aDadosFeedback)){
+                $aDadosFeedback = $aDadosFeedback[0];
+            }            
+        }        
+        
+        return $aDadosFeedback;
+    }
+    
+    public function insereAtividadePorUsuario($idatividade, $descricaofeedback, $usucodigo) {
+        $aDadosFeedback = array();
+        
         if((int)$usucodigo > 0 && (int)$idatividade > 0 && $descricaofeedback != ""){
             $aDadosFeedback = $this->getListAll(false, $usucodigo, $idatividade);
-                
+        
             // Se ja tiver um feedback, retorna o mesmo
             if(count($aDadosFeedback)){
                 return $aDadosFeedback[0];
             }
-            
+        
             $sql_insert = 'insert into feedback(usucodigo, idatividade, feedback) values ( 
               ' . $usucodigo . ',
               ' . $idatividade . ',
               \'' . $descricaofeedback . '\'
             );';
-            
+        
             if($this->getQuery()->executaQuery($sql_insert)){
                 $sql = "select * from feedback order by 1 desc limit 1";
-        
+            
                 if($aDados = $this->getQuery()->selectAll($sql)){
-                    return $aDados[0];
+                    $aDadosFeedback = $aDados[0];
                 }
-            }            
-        }        
+            }
+        }
         
-        return array();
+        return $aDadosFeedback;
     }
     
     public function excluiAtividade(Request $request, Response $response, array $args) {
