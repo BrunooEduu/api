@@ -18,6 +18,7 @@ require_once("./controllers/ControllerApiAuxilioEmergencial.php");
 require_once("./controllers/ControllerApiUpdateDatabase.php");
 require_once("./controllers/ControllerApiAtividade.php");
 require_once("./controllers/ControllerApiFeedbacks.php");
+require_once("./controllers/ControllerApiImobiliaria.php");
 
 class Routes
 {
@@ -90,7 +91,11 @@ class Routes
             $app->post('/feedbackslist', ControllerApiFeedbacks::class . ':index');
             $app->post('/feedbacks', ControllerApiFeedbacks::class . ':store');
             $app->put('/feedbacks', ControllerApiFeedbacks::class . ':update');
-            
+    
+            // Localizacoes Imobiliaria
+            $app->get('/imobiliaria', ControllerApiImobiliaria::class . ':index');
+    
+    
         })->add($this->getMiddlewares());
 
         $app->run();
