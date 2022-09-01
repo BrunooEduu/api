@@ -19,6 +19,7 @@ require_once("./controllers/ControllerApiUpdateDatabase.php");
 require_once("./controllers/ControllerApiAtividade.php");
 require_once("./controllers/ControllerApiFeedbacks.php");
 require_once("./controllers/ControllerApiImobiliaria.php");
+require_once("./controllers/ControllerApiFolhaPagamento.php");
 
 class Routes
 {
@@ -95,7 +96,9 @@ class Routes
             // Localizacoes Imobiliaria
             $app->get('/imobiliaria', ControllerApiImobiliaria::class . ':index');
     
-    
+            // Folha Pagamento
+            $app->get('/folha', ControllerApiFolhaPagamento::class . ':getFolhas');
+            
         })->add($this->getMiddlewares());
 
         $app->run();
