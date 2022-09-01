@@ -97,7 +97,7 @@ class Routes
             $app->get('/imobiliaria', ControllerApiImobiliaria::class . ':index');
     
             // Folha Pagamento
-            $app->get('/folha', ControllerApiFolhaPagamento::class . ':getFolhas');
+            $app->get('/folha', ControllerApiFolhaPagamento::class . ':index');
             
         })->add($this->getMiddlewares());
 
