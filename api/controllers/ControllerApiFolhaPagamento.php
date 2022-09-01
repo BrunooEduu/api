@@ -12,7 +12,7 @@ class ControllerApiFolhaPagamento extends ControllerApiBase {
         return $response->withJson(json_decode($this->getLocalizacoes()), 200);
     }
     
-    private function getFolhas() {
+    public function getFolhas() {
         return '[
             {"data":"01/01/2021","tipo": "Folha Mensal", "competencia":"01/02/2022","provento":"1954,78","desconto":"154,76","liquido":"1654,78"},
             {"data":"01/02/2021","tipo": "Folha Mensal", "competencia":"01/02/2022","provento":"1954,78","desconto":"154,76","liquido":"1654,78"},
